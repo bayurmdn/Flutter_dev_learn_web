@@ -1,40 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:web_project/Popular.dart';
+import 'package:web_project/Home.dart';
+import 'package:web_project/News.dart';
 
 void main() {
   runApp(HomePage());
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomepageState createState() => _HomepageState();
+}
+
+class _HomepageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  TabController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        TabController(length: 3, vsync: this); //how many tab will build
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.pink[800],
-        leading: Icon(Icons.home),
-        title: Text('Food Ordered'),
-      ),
-      body: Container(
-        margin: EdgeInsets.all(30.0),
-        child: Column(
-          children: <Widget>[
-            Row(children: <Widget>[
-              Icon(Icons.archive),
-              Text('Martabak goreng',
-                  style: new TextStyle(fontWeight: FontWeight.bold))
-            ]),
-            Card(
-              child: Column(
-                children: <Widget>[
-                  Image.network(
-                      'https://1.bp.blogspot.com/-6OzT60Robq0/XucS_EtiqaI/AAAAAAABwqc/7-C6DGISigcuU-vxQqRRZhxWF4lN0cpUACK4BGAsYHg/s800/Martabak%2BTelur.jpg'),
-                  Text('Dengan keju coklat yang mmenggugah selera')
-                ],
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Foody'),
+          backgroundColor: Colors.pink[800],
+          bottom: TabBar(
+            controller: controller,
+            tabs: <Tab>[
+              Tab(
+                icon: Icon(Icons.home),
               ),
-            )
-          ],
+              Tab(
+                icon: Icon(Icons.note),
+              ),
+              Tab(
+                icon: Icon(Icons.poll),
+              )
+            ],
+          ),
+        ),
+        body: TabBarView(
+          controller: controller,
+          children: <Widget>[Home(), News(), Popular()],
         ),
       ),
-    ));
+    );
   }
 }
